@@ -6,6 +6,9 @@
 # C extensions
 *.so
 
+# VIM swap
+*.swp
+
 # Personal file
 exec_time.py
 .measresOLD/
