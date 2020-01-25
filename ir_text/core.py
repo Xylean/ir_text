@@ -29,16 +29,16 @@ class InvertedIndex():
             for (term, frequency) in zip(*bag_of_words):
                 self.index.inverted[term].append((article['id'], frequency))
         if idf :
-            len_corpus = len(self.index.descriptors)
+            corpus_len = len(self.index.descriptors) - 1 #Index 0 doesn't exist
             for term in self.index.inverted:
                 passage = []
-                len_term = len(self.index.inverted[term])
+                term_len = len(self.index.inverted[term])
                 while self.index.inverted[term]:
-                    id_doc, _ = self.index.inverted[term].pop()
-                    idf = np.log10(len_corpus/len_term)
-                    passage.append((id_doc, idf))
+                    id_doc, frequency = self.index.inverted[term].pop()
+                    idf = np.log10(corpus_len/term_len)
+                    passage.append((id_doc, idf * frequency))
                 self.index.inverted[term] = passage
-        
+
     def search(self, query, measure = Measures.DICE):
         short_list = []
         short_list_id = set()
@@ -53,7 +53,7 @@ class InvertedIndex():
                         short_list.append((article_id, frequency))
                         short_list_id.add(article_id)
 
-        for article_id, frequency in short_list:
+        for article_id, _ in short_list:
             if measure == Measures.DICE :
                 results.append((article_id, measures.dice_coef(query_bow[0], self.index.descriptors[article_id][0])))
             if measure == Measures.TF :
@@ -61,32 +61,24 @@ class InvertedIndex():
 
         return sorted(results, key = lambda item : item[1], reverse = True)
 
-'''
-    Tu peux faire des tests avec ce bout de code :
-        import inverted_index as ii
-        myIndex = ii.InvertedIndex(data['dataset'][:3]) 
-        myIndex.construct()
-        print("Inverted Index :\n", myIndex.index.inverted)
-        print("Resultat 1er query", myIndex.search(query['queries'][0]['text']))
-'''
 
 class LinearIndex():
 
     def __init__(self, dataset, language = 'english'):
         self.dataset = dataset
         self.language = language
-        self.index = []
+        self.index = dict()
 
     def construct(self):
         for article in self.dataset :
-            self.index.append((article['id'], bow.bow(article['text'])))
+            self.index[article['id']] = bow.bow(article['text'])
 
     def search(self, query):
         results = []
         query_bow = bow.bow(query['text'])
 
-        for article_id, article_bow in self.index:
-            results.append((article_id, measure.dice_coef(query_bow[0], article_bow[0])))
+        for article_id in self.index:
+            #print("\nArticle :", self.index[article_id][0][:3])
+            results.append((article_id, measures.dice_coef(query_bow[0], self.index[article_id][0])))
 
         return sorted(results, key = lambda item : item[1], reverse = True)
-
