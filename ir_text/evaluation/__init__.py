@@ -1,1 +1,1 @@
-from . import ir_evaluation
+from .ir_evaluation import Evaluator
