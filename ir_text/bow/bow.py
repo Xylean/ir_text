@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .tokenizer import Tokenizer
 from nltk.stem.snowball import SnowballStemmer
 import numpy as np
