@@ -73,12 +73,14 @@ class LinearIndex():
         for article in self.dataset :
             self.index[article['id']] = bow.bow(article['text'])
 
-    def search(self, query):
+    def search(self, query, measure = Measures.DICE):
         results = []
         query_bow = bow.bow(query['text'])
 
         for article_id in self.index:
-            #print("\nArticle :", self.index[article_id][0][:3])
-            results.append((article_id, measures.dice_coef(query_bow[0], self.index[article_id][0])))
+            if measure == Measures.DICE :
+                results.append((article_id, measures.dice_coef(query_bow[0], self.index[article_id][0])))
+            if measure == Measures.TF :
+                results.append((article_id, measures.cosine_similarity(query_bow, self.index[article_id])))
 
         return sorted(results, key = lambda item : item[1], reverse = True)
