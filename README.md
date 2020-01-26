@@ -16,16 +16,8 @@ results_inverted = an_inverted_index.search(queries['queries'][0], ir_text.Measu
 ```
 A similar but more complete example is available in ```ir_text_notebook.ipynb```.
 
-## Package Composition
-
-### Core
-
-### Bag of Words
-
-### Measures
-
 ### To Do:
 - [ ] Specify stoplist path
-- [ ] Finish notebook
-- [ ] Linear index evaluation
-- [ ] Inverted index evaluation
+- [x] Finish notebook
+- [x] Linear index evaluation
+- [x] Inverted index evaluation
