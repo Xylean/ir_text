@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 class _InvertedIndexDataStructure():
     def __init__(self):
-        self.descriptors = [(["Text","with", "ID", "0", "doesn't", "exist"], [-1])]
+        self.descriptors = dict()
         self.inverted = dict()
 
 class InvertedIndex():
@@ -25,7 +25,7 @@ class InvertedIndex():
 
         for article in tqdm(self.dataset) :
             bag_of_words = bow.bow(article['text'])
-            self.index.descriptors.append(bag_of_words) # Since index 0 is already set, each bag of word's index will be equal to is id
+            self.index.descriptors[article['id']] = bag_of_words # Since index 0 is already set, each bag of word's index will be equal to is id
             for (term, frequency) in zip(*bag_of_words):
                 self.index.inverted[term].append((article['id'], frequency))
         if idf :
