@@ -23,8 +23,3 @@ start = time.time()
 for query in queries['queries']:
     myIndex.search(query, ir_text.Measures.TF)
 print('Results in', time.time() - start,  's :', res)
-'''
-print('\n- Searching with TF_IDF :')
-start = time.time()
-print('Results in', time.time() - start,  's :', myIndex.search(queries['queries'][0], ir_text.Measures.TF_IDF)[:5])
-'''
