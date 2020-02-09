@@ -1,5 +1,5 @@
 # ir_text
-A simple Information Research python package
+A simple Information Research python package.
 
 ## Simple Demo
 
